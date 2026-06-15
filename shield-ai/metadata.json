@@ -1,0 +1,6 @@
+{
+  "name": "Shield AI",
+  "description": "Professional cybersecurity protection against phishing, dangerous scams, QR codes, and malicious URLs",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
