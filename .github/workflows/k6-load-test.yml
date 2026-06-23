@@ -1,0 +1,39 @@
+﻿name: 📊 K6 Load Testing — Performance (300)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  k6-load-test:
+    name: 📊 K6 Load Testing — Performance (300)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Setup k6
+        uses: grafana/setup-k6-action@v1
+
+      - name: Run k6 Load Test
+        run: k6 run tests/performance/load-test.js
+        env:
+          TARGET_URL: "https://your-domain.com"
+
+      - name: Upload Load Testing Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-performance-reports
+          path: |
+            performance-report.html
+            performance-report.json
+            k6-summary.txt
+        if: always()
