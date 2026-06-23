@@ -1,7 +1,8 @@
-﻿const express = require("express");
+const express = require("express");
 const cors = require("cors");
 const PDFDocument = require("pdfkit");
 const path = require("path");
+const fs = require("fs");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -24,15 +25,15 @@ const workflowStatus = {
   totalFailed: 0,
   artifactsCount: 9,
   artifactsList: [
-    { name: "selenium-report", size: "145 KB", type: "XML" },
-    { name: "appium-report", size: "230 KB", type: "XML" },
-    { name: "api-report", size: "85 KB", type: "XML" },
-    { name: "validation-report", size: "90 KB", type: "XML" },
-    { name: "deployment-report", size: "55 KB", type: "XML" },
-    { name: "performance-report-html", size: "1.5 MB", type: "HTML" },
-    { name: "performance-report-json", size: "650 KB", type: "JSON" },
-    { name: "master-report-html", size: "2.1 MB", type: "HTML" },
-    { name: "master-report-pdf", size: "950 KB", type: "PDF" }
+    { name: "selenium-report.xlsx", size: "18 KB", type: "XLSX" },
+    { name: "appium-report.xlsx", size: "18 KB", type: "XLSX" },
+    { name: "api-report.xlsx", size: "18 KB", type: "XLSX" },
+    { name: "validation-report.xlsx", size: "18 KB", type: "XLSX" },
+    { name: "deployment-report.xlsx", size: "18 KB", type: "XLSX" },
+    { name: "loadtest-report.xlsx", size: "18 KB", type: "XLSX" },
+    { name: "Master_Test_Report.xlsx", size: "35 KB", type: "XLSX" },
+    { name: "master-report.html", size: "22 KB", type: "HTML" },
+    { name: "master-report.json", size: "12 KB", type: "JSON" }
   ],
   runId: "#739218",
   runNumber: 156,
@@ -55,6 +56,21 @@ app.get("/api/workflow-status", (req, res) => {
 
 app.get("/api/test-metrics", (req, res) => {
   res.json(suiteMetrics);
+});
+
+app.get("/api/download/xlsx", (req, res) => {
+  const xlsxPath = path.join(__dirname, "Master_Test_Report.xlsx");
+  if (fs.existsSync(xlsxPath)) {
+    res.download(xlsxPath, "Master_Test_Report.xlsx");
+  } else {
+    // If not generated yet, try searching parent directory
+    const parentPath = path.join(__dirname, "../../Master_Test_Report.xlsx");
+    if (fs.existsSync(parentPath)) {
+      res.download(parentPath, "Master_Test_Report.xlsx");
+    } else {
+      res.status(404).send("Master Excel report not found. Please trigger pipeline run first.");
+    }
+  }
 });
 
 app.get("/api/download/html", (req, res) => {

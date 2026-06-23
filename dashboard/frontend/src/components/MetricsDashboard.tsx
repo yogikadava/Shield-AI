@@ -40,7 +40,7 @@ export const MetricsDashboard: React.FC = () => {
     };
   });
 
-  const handleDownload = async (type: "pdf" | "html") => {
+  const handleDownload = async (type: "pdf" | "html" | "xlsx") => {
     setDownloading(type);
     try {
       window.location.href = `/api/download/${type}`;
@@ -152,13 +152,26 @@ export const MetricsDashboard: React.FC = () => {
             </h3>
             <p className="text-xs text-github-textMuted mb-4">Click below to download compiled test runner results.</p>
             <div className="space-y-3">
-              {/* HTML Report */}
+              {/* XLSX Excel Report */}
               <div className="flex items-center justify-between p-3 rounded-lg border border-github-border bg-github-bg hover:bg-github-card transition-colors">
                 <div className="flex items-center gap-2.5 min-w-0">
                   <FileText className="w-5 h-5 text-github-blue flex-shrink-0" />
                   <div className="truncate">
-                    <p className="text-xs font-semibold text-github-text truncate">performance-report.html</p>
-                    <p className="text-[10px] text-github-textMuted">Interactive HTML Summary • 1.5 MB</p>
+                    <p className="text-xs font-semibold text-github-text truncate">Master_Test_Report.xlsx</p>
+                    <p className="text-[10px] text-github-textMuted">Complete Test Workbook • 35 KB</p>
+                  </div>
+                </div>
+                <button onClick={() => handleDownload("xlsx")} disabled={downloading !== null} className="p-2 bg-github-card hover:bg-github-border text-github-text rounded border border-github-border transition-colors flex items-center justify-center">
+                  <Download className="w-4 h-4" />
+                </button>
+              </div>
+              {/* HTML Report */}
+              <div className="flex items-center justify-between p-3 rounded-lg border border-github-border bg-github-bg hover:bg-github-card transition-colors">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <FileText className="w-5 h-5 text-github-successGreen flex-shrink-0" />
+                  <div className="truncate">
+                    <p className="text-xs font-semibold text-github-text truncate">master-report.html</p>
+                    <p className="text-[10px] text-github-textMuted">Interactive HTML Dashboard • 22 KB</p>
                   </div>
                 </div>
                 <button onClick={() => handleDownload("html")} disabled={downloading !== null} className="p-2 bg-github-card hover:bg-github-border text-github-text rounded border border-github-border transition-colors flex items-center justify-center">
@@ -168,26 +181,13 @@ export const MetricsDashboard: React.FC = () => {
               {/* PDF Report */}
               <div className="flex items-center justify-between p-3 rounded-lg border border-github-border bg-github-bg hover:bg-github-card transition-colors">
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <FileText className="w-5 h-5 text-github-successGreen flex-shrink-0" />
+                  <FileText className="w-5 h-5 text-github-textMuted flex-shrink-0" />
                   <div className="truncate">
-                    <p className="text-xs font-semibold text-github-text truncate">performance-report.pdf</p>
-                    <p className="text-[10px] text-github-textMuted">Official Executive PDF Report • 850 KB</p>
+                    <p className="text-xs font-semibold text-github-text truncate">master-report.pdf</p>
+                    <p className="text-[10px] text-github-textMuted">Official PDF Executive Summary • 950 KB</p>
                   </div>
                 </div>
                 <button onClick={() => handleDownload("pdf")} disabled={downloading !== null} className="p-2 bg-github-card hover:bg-github-border text-github-text rounded border border-github-border transition-colors flex items-center justify-center">
-                  <Download className="w-4 h-4" />
-                </button>
-              </div>
-              {/* TXT Report */}
-              <div className="flex items-center justify-between p-3 rounded-lg border border-github-border bg-github-bg hover:bg-github-card transition-colors opacity-70">
-                <div className="flex items-center gap-2.5 min-w-0">
-                  <FileText className="w-5 h-5 text-github-textMuted flex-shrink-0" />
-                  <div className="truncate">
-                    <p className="text-xs font-semibold text-github-text truncate">k6-summary.txt</p>
-                    <p className="text-[10px] text-github-textMuted">Raw Terminal Export • 12 KB</p>
-                  </div>
-                </div>
-                <button disabled className="p-2 bg-github-card hover:bg-github-border text-github-textMuted rounded border border-github-border transition-colors flex items-center justify-center cursor-not-allowed">
                   <Download className="w-4 h-4" />
                 </button>
               </div>
