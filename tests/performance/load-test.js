@@ -1,4 +1,4 @@
-﻿import http from "k6/http";
+import http from "k6/http";
 import { check, sleep } from "k6";
 import { Rate } from "k6/metrics";
 import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
@@ -20,7 +20,7 @@ export const options = {
 };
 
 export default function () {
-  const targetUrl = __ENV.TARGET_URL || "https://your-domain.com";
+  const targetUrl = __ENV.TARGET_URL || "https://calm-sentinel-shield-ai.base44.app";
   const params = {
     headers: {
       "User-Agent": "k6-load-testing-agent",
@@ -43,5 +43,6 @@ export function handleSummary(data) {
     "stdout": textSummary(data, { indent: " ", enableColors: true }),
     "k6-summary.txt": textSummary(data, { indent: " ", enableColors: false }),
     "performance-report.json": JSON.stringify(data),
+    "summary.json": JSON.stringify(data),
   };
 }
