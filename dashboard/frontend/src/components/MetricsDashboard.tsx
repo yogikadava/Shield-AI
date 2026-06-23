@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { useWorkflowStore } from "../store/store";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import { Download, FileText, CheckCircle2, HelpCircle, HardDrive, AlertTriangle, Users, Activity, Zap, Clock } from "lucide-react";
@@ -8,12 +8,13 @@ export const MetricsDashboard: React.FC = () => {
   const [downloading, setDownloading] = useState<string | null>(null);
 
   const suites = [
-    { key: "unit-tests-api", name: "Unit Tests — API", description: "Tests for all REST and gRPC gateway services." },
-    { key: "selenium-website-tests", name: "Selenium — Website Tests", description: "Desktop and responsive browser tests with Xvfb fallback.", hasFallback: true, fallbackText: "Virtual Framebuffer (Xvfb)" },
-    { key: "appium-android-tests", name: "Appium — Android Tests", description: "Android application interface checks with Cloud Firebase Test Lab fallback.", hasFallback: true, fallbackText: "Firebase Test Lab Cloud Execution" },
-    { key: "validation-tests", name: "Validation Tests", description: "JSON schema verification, compliance audits, mutation checks." },
-    { key: "k6-load-test", name: "📊 K6 Load Testing — Performance", description: "K6 performance load testing under virtual user loads with latency SLAs." },
-    { key: "compile-master-report", name: "Compile Master Report & Deploy", description: "Compile consolidates and deploys master test execution outputs." }
+    { key: "selenium-website-tests", name: "🌐 Selenium — Website Tests", description: "Desktop and responsive browser tests with Xvfb fallback.", hasFallback: true, fallbackText: "Virtual Framebuffer (Xvfb)" },
+    { key: "appium-android-tests", name: "📱 Appium — Android Tests", description: "Android application interface checks with Cloud Firebase Test Lab fallback.", hasFallback: true, fallbackText: "Firebase Test Lab Cloud Execution" },
+    { key: "unit-tests-api", name: "🔬 Unit Tests — API", description: "Tests for all REST and gRPC gateway services." },
+    { key: "validation-tests", name: "✅ Validation Tests", description: "JSON schema verification, compliance audits, mutation checks." },
+    { key: "deployment-status", name: "🚀 Deployment Status", description: "Verify deployment health, API availability, DB connection and SSL certificates." },
+    { key: "load-testing-performance", name: "📊 Load Testing — Performance", description: "K6 performance load testing under virtual user loads with latency SLAs." },
+    { key: "compile-master-report", name: "📊 Compile Master Report & Deploy", description: "Compile consolidates and deploys master test execution outputs." }
   ];
 
   const totalTests = 1800;
@@ -33,7 +34,7 @@ export const MetricsDashboard: React.FC = () => {
   const chartData = suites.map(suite => {
     const job = jobs[suite.key];
     return {
-      name: suite.name.replace(/ —.*/, "").replace("📊 ", ""),
+      name: suite.name.replace(/ —.*/, "").replace(/[🌐📱🔬✅🚀📊]\s*/, ""),
       duration: job ? job.seconds : 0,
       passed: job ? job.passedTests : 0
     };

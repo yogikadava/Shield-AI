@@ -1,4 +1,4 @@
-﻿import { create } from "zustand";
+import { create } from "zustand";
 
 export interface Job {
   id: string;
@@ -30,22 +30,9 @@ interface WorkflowState {
 }
 
 const initialJobs: Record<string, Job> = {
-  "unit-tests-api": {
-    id: "unit-tests-api",
-    name: "Unit Tests — API (300)",
-    totalTests: 300,
-    passedTests: 0,
-    failedTests: 0,
-    duration: "0s",
-    seconds: 75,
-    status: "waiting",
-    dependencies: [],
-    progress: 0,
-    logs: []
-  },
   "selenium-website-tests": {
     id: "selenium-website-tests",
-    name: "Selenium — Website Tests (300)",
+    name: "🌐 Selenium — Website Tests (300)",
     totalTests: 300,
     passedTests: 0,
     failedTests: 0,
@@ -58,7 +45,7 @@ const initialJobs: Record<string, Job> = {
   },
   "appium-android-tests": {
     id: "appium-android-tests",
-    name: "Appium — Android Tests (300)",
+    name: "📱 Appium — Android Tests (300)",
     totalTests: 300,
     passedTests: 0,
     failedTests: 0,
@@ -69,62 +56,83 @@ const initialJobs: Record<string, Job> = {
     progress: 0,
     logs: []
   },
+  "unit-tests-api": {
+    id: "unit-tests-api",
+    name: "🔬 Unit Tests — API (300)",
+    totalTests: 300,
+    passedTests: 0,
+    failedTests: 0,
+    duration: "0s",
+    seconds: 75,
+    status: "waiting",
+    dependencies: [],
+    progress: 0,
+    logs: []
+  },
   "validation-tests": {
     id: "validation-tests",
-    name: "Validation Tests (300)",
+    name: "✅ Validation Tests (300)",
     totalTests: 300,
     passedTests: 0,
     failedTests: 0,
     duration: "0s",
     seconds: 125,
     status: "waiting",
-    dependencies: ["unit-tests-api"],
+    dependencies: [],
     progress: 0,
     logs: []
   },
-  "k6-load-test": {
-    id: "k6-load-test",
-    name: "📊 K6 Load Testing — Performance (300)",
+  "deployment-status": {
+    id: "deployment-status",
+    name: "🚀 Deployment Status (300)",
+    totalTests: 300,
+    passedTests: 0,
+    failedTests: 0,
+    duration: "0s",
+    seconds: 100,
+    status: "waiting",
+    dependencies: [],
+    progress: 0,
+    logs: []
+  },
+  "load-testing-performance": {
+    id: "load-testing-performance",
+    name: "📊 Load Testing — Performance (300)",
     totalTests: 300,
     passedTests: 0,
     failedTests: 0,
     duration: "0s",
     seconds: 175,
     status: "waiting",
-    dependencies: ["unit-tests-api", "selenium-website-tests", "appium-android-tests", "validation-tests"],
+    dependencies: [],
     progress: 0,
     logs: []
   },
   "compile-master-report": {
     id: "compile-master-report",
-    name: "Compile Master Report & Deploy",
-    totalTests: 300,
+    name: "📊 Compile Master Report & Deploy",
+    totalTests: 0,
     passedTests: 0,
     failedTests: 0,
     duration: "0s",
     seconds: 40,
     status: "waiting",
-    dependencies: ["k6-load-test"],
+    dependencies: [
+      "selenium-website-tests",
+      "appium-android-tests",
+      "unit-tests-api",
+      "validation-tests",
+      "deployment-status",
+      "load-testing-performance"
+    ],
     progress: 0,
     logs: []
   }
 };
 
 const jobLogsTemplate: Record<string, string[]> = {
-  "unit-tests-api": [
-    "Initializing API test runner environment...",
-    "Running API unit test suites (300 test cases)...",
-    "✓ GET /api/v1/auth/session - Status 200 OK [12ms]",
-    "✓ POST /api/v1/auth/login - Status 200 OK [45ms]",
-    "✓ GET /api/v1/users/profile - Status 200 OK [15ms]",
-    "✓ POST /api/v1/users/update - Status 200 OK [32ms]",
-    "✓ GET /api/v1/projects - Status 200 OK [18ms]",
-    "✓ POST /api/v1/projects/create - Status 201 Created [55ms]",
-    "✓ GET /api/v1/health - Status 200 OK [5ms]",
-    "All 300 API endpoints unit test assertions passed."
-  ],
   "selenium-website-tests": [
-    "Setting up Chrome Headless browser environment...",
+    "Setting up Headless Chrome environment...",
     "Warning: Headless Chrome launch timeout. Spawning Virtual Framebuffer (Xvfb)...",
     "Xvfb instance spawned on display :99 successfully.",
     "Running website selenium integration suites (300 test cases)...",
@@ -142,6 +150,18 @@ const jobLogsTemplate: Record<string, string[]> = {
     "✓ Sign-in screen validation with bio-auth prompt",
     "All 300 Mobile E2E assertions passed."
   ],
+  "unit-tests-api": [
+    "Initializing API test runner environment...",
+    "Running API unit test suites (300 test cases)...",
+    "✓ GET /api/v1/auth/session - Status 200 OK [12ms]",
+    "✓ POST /api/v1/auth/login - Status 200 OK [45ms]",
+    "✓ GET /api/v1/users/profile - Status 200 OK [15ms]",
+    "✓ POST /api/v1/users/update - Status 200 OK [32ms]",
+    "✓ GET /api/v1/projects - Status 200 OK [18ms]",
+    "✓ POST /api/v1/projects/create - Status 201 Created [55ms]",
+    "✓ GET /api/v1/health - Status 200 OK [5ms]",
+    "All 300 API endpoints unit test assertions passed."
+  ],
   "validation-tests": [
     "Initializing schema structural validators...",
     "Validating JSON Schema compliance of 300 endpoint payloads...",
@@ -149,7 +169,18 @@ const jobLogsTemplate: Record<string, string[]> = {
     "✓ Swagger definitions and production code interfaces match.",
     "All 300 validation assertions completed successfully."
   ],
-  "k6-load-test": [
+  "deployment-status": [
+    "Checking target deployment environment variables...",
+    "Verifying SSL/TLS certificate validity for https://your-domain.com...",
+    "✓ TLS security handshake and DNS verification successful.",
+    "Performing health checks on API gateway...",
+    "✓ GET https://api.your-domain.com/health - Status 200 OK [14ms]",
+    "Verifying database connectivity pool...",
+    "✓ DB Connection Pool active (15/50 active connections).",
+    "Running deployment status verification (300 assertions)...",
+    "✓ 300 deployment audit checks passed."
+  ],
+  "load-testing-performance": [
     "Initializing Grafana k6 engine...",
     "SLA checks configured: availability > 99%, error rate < 1%, p(95) < 500ms",
     "Ramping up virtual users to 300 VUs in 10s...",
@@ -162,8 +193,8 @@ const jobLogsTemplate: Record<string, string[]> = {
     "All 300 performance checks and SLA thresholds satisfied."
   ],
   "compile-master-report": [
-    "Downloading reports from API (300), Selenium (300), Appium (300), Validation (300), and K6 (300)...",
-    "Consolidating 1500 test cases + 300 deployment audit checks (1800 total)...",
+    "Downloading reports from API (300), Selenium (300), Appium (300), Validation (300), Deployment Status (300), and Performance (300)...",
+    "Consolidating 1800 test cases total...",
     "Running post-deployment integrity verification (300 assertions)...",
     "✓ Staging pod replica check: 6/6 pods online",
     "✓ TLS security handshake and DNS verification",

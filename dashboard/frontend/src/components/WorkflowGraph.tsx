@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { useWorkflowStore } from "../store/store";
 import type { Job } from "../store/store";
 import { CheckCircle2, Loader2, PlayCircle, Layers } from "lucide-react";
@@ -13,14 +13,15 @@ interface NodePosition {
 export const WorkflowGraph: React.FC = () => {
   const { jobs, selectedJobId, setSelectedJobId } = useWorkflowStore();
 
-  // Coordinate positions for the 6 stages layout
+  // Coordinate positions for the 7 stages layout
   const positions: Record<string, NodePosition> = {
-    "unit-tests-api": { x: 50, y: 30, width: 220, height: 60 },
-    "selenium-website-tests": { x: 50, y: 120, width: 220, height: 60 },
-    "appium-android-tests": { x: 50, y: 210, width: 220, height: 60 },
-    "validation-tests": { x: 330, y: 30, width: 220, height: 60 },
-    "k6-load-test": { x: 610, y: 120, width: 220, height: 60 },
-    "compile-master-report": { x: 890, y: 120, width: 220, height: 60 }
+    "selenium-website-tests": { x: 50, y: 20, width: 250, height: 54 },
+    "appium-android-tests": { x: 50, y: 90, width: 250, height: 54 },
+    "unit-tests-api": { x: 50, y: 160, width: 250, height: 54 },
+    "validation-tests": { x: 50, y: 230, width: 250, height: 54 },
+    "deployment-status": { x: 50, y: 300, width: 250, height: 54 },
+    "load-testing-performance": { x: 50, y: 370, width: 250, height: 54 },
+    "compile-master-report": { x: 450, y: 195, width: 250, height: 54 }
   };
 
   const getBezierPath = (startX: number, startY: number, endX: number, endY: number) => {
@@ -47,14 +48,14 @@ export const WorkflowGraph: React.FC = () => {
     }
   };
 
-  // Dependency connections mapping the exact requires lists
+  // Dependency connections mapping the exact GHA graph requirements
   const connections = [
-    { from: "unit-tests-api", to: "validation-tests" },
-    { from: "unit-tests-api", to: "k6-load-test" },
-    { from: "selenium-website-tests", to: "k6-load-test" },
-    { from: "appium-android-tests", to: "k6-load-test" },
-    { from: "validation-tests", to: "k6-load-test" },
-    { from: "k6-load-test", to: "compile-master-report" }
+    { from: "selenium-website-tests", to: "compile-master-report" },
+    { from: "appium-android-tests", to: "compile-master-report" },
+    { from: "unit-tests-api", to: "compile-master-report" },
+    { from: "validation-tests", to: "compile-master-report" },
+    { from: "deployment-status", to: "compile-master-report" },
+    { from: "load-testing-performance", to: "compile-master-report" }
   ];
 
   return (
@@ -64,7 +65,7 @@ export const WorkflowGraph: React.FC = () => {
         <h2 className="text-sm font-semibold text-github-text">Workflow Graph Dependency View</h2>
       </div>
 
-      <div className="relative min-w-[1160px] h-[300px]">
+      <div className="relative min-w-[800px] h-[450px]">
         <svg className="absolute inset-0 w-full h-full pointer-events-none">
           <defs>
             <linearGradient id="gradient-line" x1="0%" y1="0%" x2="100%" y2="0%">
